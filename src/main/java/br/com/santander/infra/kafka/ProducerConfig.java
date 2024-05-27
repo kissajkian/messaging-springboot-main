@@ -1,6 +1,7 @@
 package br.com.santander.infra.kafka;
 
 import br.com.santander.app.dto.DeviceContracted;
+import br.com.santander.app.dto.Retry;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,11 @@ public class ProducerConfig {
     @Value(value = "${spring.kafka.producer.bootstrap-servers}")
     private String boostrapAddress;
 
-    @Value(value = "${topic.consumer-contractions-events}")
+    @Value(value = "${topic.retry-devices-events}")
     private String topic;
 
     @Bean
-    public ProducerFactory<String, DeviceContracted> deviceFactory(){
+    public ProducerFactory<String, Retry> deviceFactory(){
         Map<String, Object> configProps = new HashMap<>();
             configProps.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapAddress);
             configProps.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -37,7 +38,7 @@ public class ProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, DeviceContracted> kafkaTemplate() {
+    public KafkaTemplate<String, Retry> kafkaTemplate() {
         return new KafkaTemplate<>(deviceFactory());
     }
 
